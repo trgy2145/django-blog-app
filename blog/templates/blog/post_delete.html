@@ -1,0 +1,11 @@
+{% extends 'users/base.html' %}
+{% block content %}
+<div>
+    <form action="" , method="POST">
+        <h3>Are you sure to delete? </h3>
+        {% csrf_token %} <br />
+        <input class="btn btn-outline-dark" type="submit" value="Delete" />
+        <a href="{% url 'list' %}" class="btn btn-warning">Return</a>
+    </form>
+</div>
+{% endblock content %}

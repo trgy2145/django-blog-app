@@ -1,0 +1,12 @@
+{% extends 'users/base.html' %} {% block content %}
+
+<center class="h2">Add Comment</center>
+{% load crispy_forms_tags %}
+<div class="container" >
+<form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %} {{form|crispy}}
+
+    <input class='btn btn-outline-dark' type="submit" value="Add Comment" />
+</form>
+</div>
+{% endblock content %}

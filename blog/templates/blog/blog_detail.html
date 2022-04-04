@@ -1,0 +1,60 @@
+{% extends 'users/base.html' %}
+{% load hitcount_tags %}
+{% block content %}
+{% load static %}
+<div class="container my-4">
+<div class="d-flex bd-highlight justify-content-center ">
+  <center class='mt-5'>
+  <div class="p-2 flex-grow-1 bd-highlight"><img  class='rounded-circle' style='width:450px' src="{{blog.image.url}}" alt="..." /></div>
+  <div class="p-2 bd-highlight">
+    <h3 class="text-dark">{{blog.title}}</h5>
+    <hr>
+    <p >{{blog.content}}</p>
+    <div>
+      {% if request.user == blog.author %}
+      <a href="{% url 'update' blog.id  %}" class="btn btn-outline-warning">Update</a>
+      <a href="{% url 'delete' blog.id  %}" class="btn btn-outline-danger">Delete</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+<div class="d-flex align-items-end flex-column bd-highlight mb-3">
+  <form action="{% url 'like_post' blog.pk %}" method='POST' >
+    {% csrf_token %}
+   <button style='background:white' class='btn' type='submit', name='blog_id', value='{{blog.id}}'><i class="fa-solid fa-heart "></i>{{blog.total_likes}}</button>
+   <button style='background:white' class='btn' type='submit', name='blog_id', value='{{blog.id}}'><i class="fa fa-eye"></i>{% get_hit_count for blog %}</button>
+   <button style='background:white' class='btn' type='submit', name='blog_id',  value='{{blog.id}}'><i class="fa-solid fa-comment-dots"></i>{{blog.comments.count}}</button>
+  </form>
+</div>
+
+<div class="card-footer">
+    <div  class="d-flex bd-highlight mb-3">
+        <div class="p-2 bd-highlight">
+          <img class='rounded-circle' style='width:50px' src='{{blog.author.profile.image.url}}'>
+          <small class='text-muted ml-1'>Author: {{blog.author}}</small>
+          <br> <br>
+          <small class="text-muted">Last updated {{ blog.dateTime |timesince}} ago</small>
+        </div>
+      </div>
+</center>
+      <hr>
+      <h3>Comments...</h3>
+      <hr>
+      <br>
+      {% if not blog.comments.all %}
+        Not comments yet... <a href="{% url 'add_comment' blog.pk %}"> Add one</a>
+      {% else %}
+        {% for comment in blog.comments.all %}
+          {{comment.body}}
+          <br>
+          <strong>
+          {{comment.name}} -
+          {{comment.dateTime}}
+        </strong> <br>
+        <br>
+        {% endfor %}
+        <button class='btn btn-outline-primary'><a class='text-dark' href="{% url 'add_comment' blog.pk %}">Add comment</a></button>
+      {% endif %}
+  </div>   
+</div>    
+{% endblock content %}
